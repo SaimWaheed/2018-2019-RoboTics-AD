@@ -24,6 +24,10 @@ const auto CHASSIS_WIDTH = 13.5_in;
 pros::Motor launcher(4,5);
 pros::Motor intake(8);
 
+
+
+okapi::IntegratedEncoder top_right(11);
+okapi::IntegratedEncoder back_left(10);
 auto chassis = ChassisControllerFactory::create(
   left, right,
   AbstractMotor::gearset::green,
@@ -40,9 +44,7 @@ intake.moveVelocity(0);
 
 /*
 float speedChangePerLoop = 0.06;
-
 float leftPower = 0, rightPower = 0;
-
 void accelerateDrive(int leftTargetPower, int rightTargetPower)
 {
 	if(leftTargetPower < leftPower)
@@ -56,7 +58,6 @@ void accelerateDrive(int leftTargetPower, int rightTargetPower)
     chassis.setMaxVelocity(leftPower);
 	}
 	else{}
-
 	if(rightTargetPower < rightPower)
 	{
 		rightPower -= speedChangePerLoop;
@@ -68,11 +69,35 @@ void accelerateDrive(int leftTargetPower, int rightTargetPower)
     chassis.setMaxVelocity(rightPower);
 	}
 	else{}
-
 }
 */
 
 //auto PID = IterativePosPIDController::create(double ikP, double ikI, double ikD);
+
+void autoPID(int target){
+
+  int kP = 0.5;
+  int kI = 0.3;
+  int KD = 0.2;
+
+
+  while ()
+  {
+  error = (target value) – (sensor reading);
+  integral = integral + error;
+  if (error = 0)
+  {
+  integral = 0;
+  }
+  if ( abs(error) > 40)
+  {
+  integral = 0;
+  }
+  derivative = error – previous_error;
+  previous_error = error;
+  speed = Kp*error + Ki*integral + Kd*derivative;
+  }
+}
 
 void autonomous() {
   right.setReversed(true);
@@ -83,12 +108,11 @@ void autonomous() {
   chassis.moveDistance(1_ft); //moves in position to shoot
   intake = -75;
   pros::delay(500);
+  intake = 0;
   chassis.moveDistance(2.6_ft); //moves forward to hit the bottom flag
   chassis.moveDistance(-3.6_ft); //moves backward to the starting position
   chassis.turnAngle(-90_deg); //turns toward the cap
   intake = 100;
   pros::delay(1000);
   chassis.moveDistance(2.6_ft); //move forward to take the ball
-
-
 }
